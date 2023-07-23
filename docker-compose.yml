@@ -18,5 +18,5 @@ services:
     volumes:
       # host의 경로를 컨테이너 내부와 마운트
       - .:/apps
-    working_dir: /apps
+    working_dir: /app
     restart: always
