@@ -1,7 +1,8 @@
 # Intro
 - Chatty with GPT(openai) based on web-socket 
 - https://marvelous-bramble-54c.notion.site/1ec59b9d720b4d26b9a0b8d19b85e7b8
-- client : http://43.201.154.250/
+- client-sample : http://54.180.109.21/
+- .env : setting local environment (OPENAPI_KEY)  
 
 ## Protocol
 - defined in protocol.py

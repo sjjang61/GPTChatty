@@ -93,7 +93,7 @@ import textwrap
 request_setting = "You are an "+ setting_language +" assistant with an English level of " + setting_level +". Speak like a " + setting_tone +". Make all your answers conversational."
 
 # OpenAI API 인증
-openai.api_key = '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'  # 여기에 API 키를 입력하세요.
+openai.api_key = 'OPEN_API_KEY'  # 여기에 API 키를 입력하세요.
 text_length = 60
 #article_text = "article : Donghae Water and Baekdu Mountain to dry up and wear out"
 
