@@ -1,8 +1,8 @@
 # https://github.com/dpallot/simple-websocket-server
 # pip install SimpleWebSocketServer
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
-import chatty as chat
-import protocol as pt
+from app.chatty import Chatty
+from app.protocol import Command
 import json
 import os
 
@@ -29,7 +29,7 @@ class SimpleChat(WebSocket):
         print("[RecvMessage] cmd = %r, params = %r" % (cmd, params))
         send_data = {'cmd': cmd + "_ACK" }
 
-        if cmd == pt.Command.TEXTBOOK.name:
+        if cmd == Command.TEXTBOOK.name:
 
             print(f"[REQ] textbook, contents = {params['url']}")
             chatty.set_contents( params['url'] )
@@ -38,7 +38,7 @@ class SimpleChat(WebSocket):
             send_data['data' ] = { 'contents' : answer }
             self.sendMessage( json.dumps( send_data ) )
 
-        elif cmd == pt.Command.CHAT_MSG.name:
+        elif cmd == Command.CHAT_MSG.name:
 
             print(f"[REQ] chatting, msg = {params['msg']}")
             answer = chatty.req_question_and_answer( params['msg'] )
@@ -67,6 +67,6 @@ class SimpleChat(WebSocket):
 
 server = SimpleWebSocketServer('', 8888, SimpleChat)
 print("start server")
-chatty = chat.Chatty()
+chatty = Chatty()
 
 server.serveforever()
