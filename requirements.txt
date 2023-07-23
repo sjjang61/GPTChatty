@@ -1,0 +1,5 @@
+requests
+#simple_websocket_server
+SimpleWebsocketServer
+openai
+beautifulsoup4

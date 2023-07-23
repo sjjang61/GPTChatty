@@ -1,0 +1,22 @@
+version: '2.4'
+services:
+
+  websocket_cli:
+    container_name: websocket_client
+    build: ./docker/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./template:/var/www/html
+
+  # websocket app
+  websocket_svr:
+    container_name: websocket_server
+    build: ./docker/python
+    ports:
+      - 8888:8888
+    volumes:
+      # host의 경로를 컨테이너 내부와 마운트
+      - .:/apps
+    working_dir: /apps
+    restart: always
