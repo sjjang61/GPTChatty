@@ -39,7 +39,7 @@ class Chatty():
         self.article_text = crawl_naversearch.get_contents( content_url )
 
 
-    def req_textook( self ):
+    def req_textbook( self ):
         """
         ChatGPT 학습
         :param article_text: 기사 내용
@@ -48,7 +48,7 @@ class Chatty():
         """
 
         print("\n### [REQ] Article summary ###\n")
-        self.article_summary_text = gpt_utils.train_article_model( self.article_text, self.request_setting)
+        self.article_summary_text = gpt_utils.train_article_summary( self.article_text, self.request_setting)
         print_with_line_breaks(self.article_summary_text, text_length)
         return self.article_summary_text
 

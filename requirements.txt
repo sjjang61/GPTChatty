@@ -3,3 +3,4 @@ requests
 SimpleWebsocketServer
 openai
 beautifulsoup4
+python-dotenv

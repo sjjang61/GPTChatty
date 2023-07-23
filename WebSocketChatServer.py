@@ -3,6 +3,9 @@
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 from app.chatty import Chatty
 from app.protocol import Command
+from dotenv import load_dotenv
+from module import gpt_utils
+
 import json
 import os
 
@@ -33,7 +36,7 @@ class SimpleChat(WebSocket):
 
             print(f"[REQ] textbook, contents = {params['url']}")
             chatty.set_contents( params['url'] )
-            answer = chatty.req_textook()
+            answer = chatty.req_textbook()
 
             send_data['data' ] = { 'contents' : answer }
             self.sendMessage( json.dumps( send_data ) )
@@ -65,8 +68,12 @@ class SimpleChat(WebSocket):
        for client in clients:
           client.sendMessage(self.address[0] + u' - disconnected')
 
+# .env 환경변수 로드
+load_dotenv()
+gpt_utils.set_api_key( os.getenv("OPENAI_API_KEY") )
+
 server = SimpleWebSocketServer('', 8888, SimpleChat)
 print("start server")
-chatty = Chatty()
 
+chatty = Chatty()
 server.serveforever()
