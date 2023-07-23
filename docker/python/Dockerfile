@@ -16,6 +16,6 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt \
     && rm /usr/bin/mysql*
 
-CMD ["python3", "/apps/WebSocketServer.py"]
+CMD ["python3", "/app/WebSocketChatServer.py"]
 
 
