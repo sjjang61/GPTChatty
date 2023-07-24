@@ -4,3 +4,4 @@ SimpleWebsocketServer
 openai
 beautifulsoup4
 python-dotenv
+cachetools

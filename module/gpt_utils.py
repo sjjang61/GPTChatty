@@ -1,9 +1,12 @@
 import openai
 import os
+from module.cache_utils import CacheManager
 
 # openai.api_key = "OPENAPI_KEY"
 text_length = 60
 OPENAI_MODEL = "gpt-3.5-turbo"
+
+gpt_cache_manager = CacheManager('url')
 
 def set_api_key( key ):
     """
@@ -13,7 +16,17 @@ def set_api_key( key ):
     """
     openai.api_key = key
 
-def train_article_summary(article_text, request):
+def get_article_summary( url : str, article_text : str, request : str ) -> dict:
+    cache_data = gpt_cache_manager.get_cache( url )
+    if cache_data != None:
+        return cache_data['article']
+
+    article_summary = train_article_summary( url, article_text, request )
+    gpt_cache_manager.set_cache( { 'url' : url, 'article' : article_summary } )
+    return article_summary
+
+
+def train_article_summary(url, article_text, request) -> str:
     """
     기사 텍스트를 학습
     :param article_text:
@@ -51,7 +64,7 @@ def train_article_summary(article_text, request):
         print( "[Exception] ", e )
 
 
-def get_chatbot_response(article_text, question, request):
+def get_chatbot_response(article_text, question, request) -> str:
 
     # 질문을 ChatGPT에 전달하는 prompt
     prompt = question + "\n\n"

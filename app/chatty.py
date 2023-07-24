@@ -29,14 +29,15 @@ class Chatty():
         # contents_url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=news&query=%EB%89%B4%EC%A7%84%EC%8A%A4+%EC%BB%B4%EB%B0%B1"
         self.set_user()
         self.set_contents(contents_url)
-        # self.req_textook()
 
     def set_user(self):
         self.request_setting = user_settings.make_setting()
 
     def set_contents(self, content_url ):
         self.content_url = content_url
-        self.article_text = crawl_naversearch.get_contents( content_url )
+
+        crawl_data = crawl_naversearch.get_contents(content_url)
+        self.article_text = crawl_data['content']
 
 
     def req_textbook( self ):
@@ -48,7 +49,7 @@ class Chatty():
         """
 
         print("\n### [REQ] Article summary ###\n")
-        self.article_summary_text = gpt_utils.train_article_summary( self.article_text, self.request_setting)
+        self.article_summary_text = gpt_utils.get_article_summary(self.content_url, self.article_text, self.request_setting)
         print_with_line_breaks(self.article_summary_text, text_length)
         return self.article_summary_text
 
