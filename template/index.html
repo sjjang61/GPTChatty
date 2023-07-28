@@ -28,11 +28,24 @@
 
     <!-- 출력 area -->
     <textarea id="logViewArea" rows="50" cols="50" style="width:80%;" hidden></textarea>
+    <!--<audio id="myAudio" src="http://54.180.109.21/mp3/20230728_081535.mp3" autoplay loop controls>-->
+    <audio id="myAudio" src="">
+        오디오 지원되지 않는 브라우저
+    </audio>
+
     <script type="text/javascript">
 
-        function get_server(){
+        function get_env(){
             var url = document.URL;
             if( url.indexOf( 'localhost' ) >=0 || url.indexOf( '127.0.0.1' ) >= 0 || url.indexOf( '192.168' ) >= 0 || url.indexOf( 'file://' ) >= 0){
+                return "local";
+            }
+            return "prd";
+        }
+
+        function get_server(){
+            var env = get_env();
+            if ( env == 'local'){
                 return "ws://localhost:8888";
             }
             return "ws://54.180.109.21:8888";
@@ -83,8 +96,9 @@
             if ( command == "TEXTBOOK_ACK"){
                 textbook.value += data['contents'] + "\n";
             }
-            else if ( command == "CHAT_MSG_ACK"){
+            else if ( command == "CHAT_MSG_ACK") {
                 chatMessage.value += "[AGENT] : " + data['msg'] + "\n";
+                playAudio( data['tts_path']);
             }
             else{
                 chatMessage.value += "[ERROR] : unknown_data, cmd = " + command + "\n";
@@ -117,6 +131,21 @@
 
         function disconnect(){
             webSocket.close();
+        }
+
+        function playAudio( audio_url ){
+            var myAudio = document.getElementById("myAudio");
+            var url = document.URL;
+            var env = get_env();
+
+            if ( env == 'local'){
+                var host = url.substring( 0, url.lastIndexOf( "/" ));
+                myAudio.src = host + audio_url;
+            }
+            else{
+                myAudio.src = document.URL + audio_url;
+            }
+            myAudio.play();
         }
     </script>
     </body>

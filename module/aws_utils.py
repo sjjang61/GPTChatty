@@ -11,6 +11,8 @@ class AWSUtils():
             aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_ID"),
             region_name='ap-northeast-2').client('polly')
 
+        # self.request_tts_download( text='hello my name is yuna.')
+
 
     def request_tts_download( self, text, voice_id = 'Joanna', engine = 'neural' ):
 

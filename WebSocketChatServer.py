@@ -77,7 +77,9 @@ gpt_utils.set_api_key( os.getenv("OPENAI_API_KEY") )
 aws_utils = AWSUtils()
 
 server = SimpleWebSocketServer('', 8888, SimpleChat)
+print("============================================")
 print("start server")
+print("============================================")
 
 chatty = Chatty()
 server.serveforever()
