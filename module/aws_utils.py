@@ -12,14 +12,17 @@ polly_client = boto3.Session(
 def request_tts_download( text, voice_id = 'Joanna', engine = 'neural' ):
 
     try:
-        response = polly_client.synthesize_speech(VoiceId=voice_id, OutputFormat='mp3', Text = text, Engine = engine )
-        now_time = date_utils.now_date_str( '%Y%m%d_%H%M%S')
-
+        now_time = date_utils.now_date_str('%Y%m%d_%H%M%S')
         filepath = f"/mp3/{now_time}.mp3"
         file_full_path = f'{WEB_HOME_PATH}/{filepath}'
+
+        print(f"[REQ] TTS, filepath = {file_full_path}, text = {text}")
+        response = polly_client.synthesize_speech(VoiceId=voice_id, OutputFormat='mp3', Text = text, Engine = engine )
+
         file = open( file_full_path, 'wb')
         file.write(response['AudioStream'].read())
         file.close()
+        print(f"[REQ] TTS download completed.")
         return filepath
     except Exception as e :
         print(f"Exception : TTS message = {e}")
