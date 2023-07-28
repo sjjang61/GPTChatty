@@ -5,7 +5,7 @@ from app.chatty import Chatty
 from app.protocol import Command
 from dotenv import load_dotenv
 from module import gpt_utils
-from module import aws_utils
+from module.aws_utils import AWSUtils
 
 import json
 import os
@@ -73,6 +73,8 @@ class SimpleChat(WebSocket):
 # .env 환경변수 로드
 load_dotenv()
 gpt_utils.set_api_key( os.getenv("OPENAI_API_KEY") )
+
+aws_utils = AWSUtils()
 
 server = SimpleWebSocketServer('', 8888, SimpleChat)
 print("start server")
