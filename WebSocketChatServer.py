@@ -38,17 +38,17 @@ class SimpleChat(WebSocket):
             print(f"[REQ] textbook, contents = {params['url']}")
             chatty.set_contents( params['url'] )
             answer = chatty.req_textbook()
-            tts_path = aws_utils.request_tts_download( text=answer )
 
-            send_data['data' ] = { 'contents' : answer, 'tts_path' : tts_path  }
+            send_data['data' ] = { 'contents' : answer  }
             self.sendMessage( json.dumps( send_data ) )
 
         elif cmd == Command.CHAT_MSG.name:
 
             print(f"[REQ] chatting, msg = {params['msg']}")
             answer = chatty.req_question_and_answer( params['msg'] )
+            tts_path = aws_utils.request_tts_download(text=answer)
 
-            send_data['data' ] = {'msg': answer }
+            send_data['data' ] = {'msg': answer, 'tts_path' : tts_path }
             self.sendMessage( json.dumps( send_data ) )
 
         else:
