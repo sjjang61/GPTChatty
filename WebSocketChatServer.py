@@ -5,6 +5,7 @@ from app.chatty import Chatty
 from app.protocol import Command
 from dotenv import load_dotenv
 from module import gpt_utils
+from module import aws_utils
 
 import json
 import os
@@ -37,8 +38,9 @@ class SimpleChat(WebSocket):
             print(f"[REQ] textbook, contents = {params['url']}")
             chatty.set_contents( params['url'] )
             answer = chatty.req_textbook()
+            tts_path = aws_utils.request_tts_download( text=answer )
 
-            send_data['data' ] = { 'contents' : answer }
+            send_data['data' ] = { 'contents' : answer, 'tts_path' : tts_path  }
             self.sendMessage( json.dumps( send_data ) )
 
         elif cmd == Command.CHAT_MSG.name:
