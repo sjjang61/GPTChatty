@@ -4,10 +4,18 @@ services:
   websocket_cli:
     container_name: websocket_client
     build: ./docker/nginx
+      #context: ./docker/nginx
+      #dockerfile: Dockerfile
+      #args:
+      #  - WWW_DOMAIN_NAME=www.chatties.shop
     ports:
       - "80:80"
+      - "443:443"
+    working_dir: /etc/nginx
     volumes:
       - ./template:/var/www/html
+      - /etc/letsencrypt:/etc/letsencrypt
+    restart: always
 
   # websocket app
   websocket_svr:
@@ -17,6 +25,6 @@ services:
       - 8888:8888
     volumes:
       # host의 경로를 컨테이너 내부와 마운트
-      - .:/app
-    working_dir: /app
+      - .:/websocket_server
+    working_dir: /websocket_server
     restart: always
