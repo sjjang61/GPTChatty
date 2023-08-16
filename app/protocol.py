@@ -39,6 +39,10 @@ class Command(Enum):
     CHAT_MSG = auto()
     CHAT_MSG_ACK = auto()
 
+    FILE_TRANSFER_HEADER = auto()      # 파일전송
+    FILE_TRANSFER_BODY = auto()
+    FILE_TRANSFER_END = auto()         # 클라이언트 전송완료
+
     END_CLASS = auto()         # 수업종료
 
     # SVR -> CLT
