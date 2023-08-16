@@ -5,7 +5,7 @@ beautifulsoup4
 python-dotenv
 cachetools
 boto3
-pandas
+#pandas
 loguru
 
 requests
