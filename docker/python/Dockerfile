@@ -16,6 +16,7 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt \
     && rm /usr/bin/mysql*
 
-CMD ["python3", "WebSocketChatServer.py"]
+#CMD ["python3", "WebSocketChatServer.py"]
 #CMD ["python3", "-m", "http.server", "8888"]
+CMD ["python3", "WebSocketChatServer.py", "--ssl", "True", "--cert", "/etc/letsencrypt/live/www.chatties.shop/fullchain.pem", "--key", "/etc/letsencrypt/live/www.chatties.shop/privkey.pem" ]
 

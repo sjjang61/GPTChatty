@@ -26,5 +26,6 @@ services:
     volumes:
       # host의 경로를 컨테이너 내부와 마운트
       - .:/websocket_server
+      - /etc/letsencrypt:/etc/letsencrypt
     working_dir: /websocket_server
     restart: always

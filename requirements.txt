@@ -1,8 +1,20 @@
-requests
-#simple_websocket_server
+경#simple_websocket_server
 SimpleWebsocketServer
 openai
 beautifulsoup4
 python-dotenv
 cachetools
 boto3
+pandas
+loguru
+
+requests
+urllib3==1.26.6
+
+# amazon-transcribe
+# aiofile #async file
+# sounddevice #mic
+
+# fastapi
+# uvicorn
+# python-multipart
