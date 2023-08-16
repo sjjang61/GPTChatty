@@ -2,8 +2,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>WebSocketClient</title>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title>ChattyEnglish</title>
+    <link rel="stylesheet" type="text/css" href="./demo/transcribe-streaming-app/style.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 <body>
     <div style="width:100% ; height : 30px ; background-color: darkslategrey; color:white; padding:15px 0 0 15px; margin-bottom: 10px">
@@ -21,8 +22,10 @@
         <input type="text" id="textMessage" placeholder="채팅메시지 입력" style="width:85%; height:40px">
         <!-- 전송 버튼 -->
         <input onclick="sendMessage()" value="Send" type="button" style="height:40px">
+
+        <button id = "record" class="recordInactive" onclick = "onRecordPress()" style="width:40px; height:40px; font-size:30px;">◉</button>
         <!-- 접속 종료 버튼 -->
-        <input onclick="disconnect()" value="Disconnect" type="button" style="height:40px">
+        <!--<input onclick="disconnect()" value="Disconnect" type="button" style="height:40px">-->
     </form>
     <br />
 
@@ -33,120 +36,154 @@
         오디오 지원되지 않는 브라우저
     </audio>
 
+    <!-- aws transcribe -->
+    <div id = "mainContainer" style="width:100%; align-items:normal; margin:0 50px 0 0; min-height:50px;">
+        <!--<h1>Streaming Speech to Text</h1>-->
+        <select id="inputLanguageList" style="display:none">
+            <option value="en-US" selected>English (US)</option>
+        </select>
+
+<!--        <div id="recordButtonContainer">-->
+<!--            <button id = "record" class="recordInactive" onclick = "onRecordPress()" style="width:60px; height:60px;">◉</button>-->
+<!--        </div>-->
+
+        <div id = "outputSection">
+            <!--<div id = "headerText"><h2>Transcription</h2></div>-->
+            <div id = "transcribedText"></div>
+            <div id = "translatedText" style="display:none"></div>
+        </div>
+    </div>
+
     <script type="text/javascript">
+    function get_env(){
+        var url = document.URL;
+        if( url.indexOf( 'localhost' ) >=0 || url.indexOf( '127.0.0.1' ) >= 0 || url.indexOf( '192.168' ) >= 0 || url.indexOf( 'file://' ) >= 0){
+            return "local";
+        }
+        return "prd";
+    }
 
-        function get_env(){
-            var url = document.URL;
-            if( url.indexOf( 'localhost' ) >=0 || url.indexOf( '127.0.0.1' ) >= 0 || url.indexOf( '192.168' ) >= 0 || url.indexOf( 'file://' ) >= 0){
-                return "local";
-            }
-            return "prd";
+    function get_server(){
+        var env = get_env();
+        if ( env == 'local'){
+            return "ws://localhost:8888";
+        }
+        return "wss://www.chatties.shop:8888";
+    }
+
+
+    // 웹 서버를 접속한다.
+    var server = get_server();
+    var webSocket = new WebSocket(server);
+
+    // 웹 서버와의 통신을 주고 받은 결과를 출력할 오브젝트를 가져옵니다.
+    var logViewArea = document.getElementById("logViewArea");
+    var chatMessage = document.getElementById("chatMessage");
+    var textbook = document.getElementById("textbook");
+    var textMessage = document.getElementById("textMessage");
+    var transcribedText = document.getElementById("transcribedText");
+
+    textMessage.addEventListener("keyup", function (event) {
+        if ( event.keyCode === 13) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // 소켓 접속이 되면 호출되는 함수
+    webSocket.onopen = function(message){
+
+        console.log( "Server connect...");
+
+        var contents_url = document.getElementById("contents_url").value;
+        autoMessage( "TEXTBOOK", { "url" : contents_url })
+    };
+    // 소켓 접속이 끝나면 호출되는 함수
+    webSocket.onclose = function(message){
+        logViewArea.value += "Server Disconnect...\n";
+    };
+    // 소켓 통신 중에 에러가 발생되면 호출되는 함수
+    webSocket.onerror = function(message){
+        logViewArea.value += "error...\n";
+    };
+    // 소켓 서버로 부터 메시지가 오면 호출되는 함수.
+    webSocket.onmessage = function(message){
+        // 출력 area에 메시지를 표시한다.
+        var recv_data = JSON.parse( message.data );
+        console.log( recv_data );
+
+        var command = recv_data['cmd'];
+        var data = recv_data['data'];
+        if ( command == "TEXTBOOK_ACK"){
+            textbook.value += data['contents'] + "\n";
+        }
+        else if ( command == "CHAT_MSG_ACK") {
+            chatMessage.value += "[AGENT] : " + data['msg'] + "\n";
+            playAudio( data['tts_path']);
+        }
+        else{
+            chatMessage.value += "[ERROR] : unknown_data, cmd = " + command + "\n";
         }
 
-        function get_server(){
-            var env = get_env();
-            if ( env == 'local'){
-                return "ws://localhost:8888";
-            }
-            return "ws://54.180.109.21:8888";
+    };
+
+    // 서버로 메시지를 전송하는 함수
+    function sendMessage( value ){
+        var message = document.getElementById("textMessage");
+        if ( !value ){
+            value = message.value;
         }
+        var data = { "cmd" : "CHAT_MSG", "params" : { 'msg' : value }};
+        var sendData = JSON.stringify( data );
 
+        logViewArea.value += "[SEND] to Server => "+ value +"\n";
+        chatMessage.value += "[ME] : " + value+"\n";
 
-        // 웹 서버를 접속한다.
-        var server = get_server();
-        var webSocket = new WebSocket(server);
+        //웹소켓으로 textMessage객체의 값을 보낸다.
+        webSocket.send( sendData );
+        //textMessage객체의 값 초기화
+        message.value = "";
+    }
 
-        // 웹 서버와의 통신을 주고 받은 결과를 출력할 오브젝트를 가져옵니다.
-        var logViewArea = document.getElementById("logViewArea");
-        var chatMessage = document.getElementById("chatMessage");
-        var textbook = document.getElementById("textbook");
-        var textMessage = document.getElementById("textMessage");
+    function autoMessage( command, params ){
+        //var data = { "cmd" : command, "params" : JSON.parse( message ) };
+        var data = { "cmd" : command, "params" : params };
+        var sendData = JSON.stringify( data);
+        //웹소켓으로 textMessage객체의 값을 보낸다.
+        webSocket.send( sendData );
+    }
 
-        textMessage.addEventListener("keyup", function (event) {
-            if ( event.keyCode === 13) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
+    function disconnect(){
+        webSocket.close();
+    }
 
-        // 소켓 접속이 되면 호출되는 함수
-        webSocket.onopen = function(message){
+    function playAudio( audio_url ){
+        var myAudio = document.getElementById("myAudio");
+        var url = document.URL;
+        var env = get_env();
 
-            console.log( "Server connect...");
-
-            var contents_url = document.getElementById("contents_url").value;
-            autoMessage( "TEXTBOOK", { "url" : contents_url })
-        };
-        // 소켓 접속이 끝나면 호출되는 함수
-        webSocket.onclose = function(message){
-            logViewArea.value += "Server Disconnect...\n";
-        };
-        // 소켓 통신 중에 에러가 발생되면 호출되는 함수
-        webSocket.onerror = function(message){
-            logViewArea.value += "error...\n";
-        };
-        // 소켓 서버로 부터 메시지가 오면 호출되는 함수.
-        webSocket.onmessage = function(message){
-            // 출력 area에 메시지를 표시한다.
-            var recv_data = JSON.parse( message.data );
-            console.log( recv_data );
-
-            var command = recv_data['cmd'];
-            var data = recv_data['data'];
-            if ( command == "TEXTBOOK_ACK"){
-                textbook.value += data['contents'] + "\n";
-            }
-            else if ( command == "CHAT_MSG_ACK") {
-                chatMessage.value += "[AGENT] : " + data['msg'] + "\n";
-                playAudio( data['tts_path']);
-            }
-            else{
-                chatMessage.value += "[ERROR] : unknown_data, cmd = " + command + "\n";
-            }
-
-        };
-
-        // 서버로 메시지를 전송하는 함수
-        function sendMessage(){
-            var message = document.getElementById("textMessage");
-            var data = { "cmd" : "CHAT_MSG", "params" : { 'msg' : message.value }};
-            var sendData = JSON.stringify( data );
-
-            logViewArea.value += "[SEND] to Server => "+ message.value +"\n";
-            chatMessage.value += "[ME] : " + message.value+"\n";
-
-            //웹소켓으로 textMessage객체의 값을 보낸다.
-            webSocket.send( sendData );
-            //textMessage객체의 값 초기화
-            message.value = "";
+        if ( env == 'local'){
+            var host = url.substring( 0, url.lastIndexOf( "/" ));
+            myAudio.src = host + audio_url;
         }
-
-        function autoMessage( command, params ){
-            //var data = { "cmd" : command, "params" : JSON.parse( message ) };
-            var data = { "cmd" : command, "params" : params };
-            var sendData = JSON.stringify( data);
-            //웹소켓으로 textMessage객체의 값을 보낸다.
-            webSocket.send( sendData );
+        else{
+            myAudio.src = document.URL + audio_url;
         }
+        myAudio.play();
+    }
 
-        function disconnect(){
-            webSocket.close();
-        }
+    function callbackStartRecording(){
+        console.log("[callback] start recording");
+    }
+    function callbackStopRecording(){
+        console.log("[callback] stop recording");
 
-        function playAudio( audio_url ){
-            var myAudio = document.getElementById("myAudio");
-            var url = document.URL;
-            var env = get_env();
-
-            if ( env == 'local'){
-                var host = url.substring( 0, url.lastIndexOf( "/" ));
-                myAudio.src = host + audio_url;
-            }
-            else{
-                myAudio.src = document.URL + audio_url;
-            }
-            myAudio.play();
-        }
+        setTimeout(() => {
+            console.log("timeout = ", transcribedText.innerText );
+            sendMessage( transcribedText.innerText );
+        }, 2000);
+    }
     </script>
+    <script type="text/javascript" src="./main.js"></script>
     </body>
 </html>

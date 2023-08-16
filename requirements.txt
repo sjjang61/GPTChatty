@@ -1,4 +1,4 @@
-경#simple_websocket_server
+#simple_websocket_server
 SimpleWebsocketServer
 openai
 beautifulsoup4
