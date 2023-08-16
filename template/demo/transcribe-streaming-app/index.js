@@ -27,8 +27,14 @@ const email = document.getElementById("email");
 window.onRecordPress = () => {
   if (recordButton.getAttribute("class") === "recordInactive") {
     startRecording();
+    if ( typeof callbackStartRecording !== "undefined" && typeof callbackStartRecording === "function" ) {
+      callbackStartRecording();
+    }
   } else {
     stopRecording();
+    if ( typeof callbackStopRecording !== "undefined" && typeof callbackStopRecording === "function" ){
+      callbackStopRecording();
+    }
   }
 };
 
