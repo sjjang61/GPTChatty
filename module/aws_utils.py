@@ -10,10 +10,9 @@ class AWSUtils():
             aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_ID"),
             region_name='ap-northeast-2').client('polly')
-
         # self.request_tts_download( text='hello my name is yuna.')
 
-
+    # 참고 : https://docs.aws.amazon.com/ko_kr/polly/latest/dg/SynthesizeSpeechSamplePython.html
     def request_tts_download( self, text, voice_id = 'Joanna', engine = 'neural' ):
 
         try:
@@ -40,3 +39,8 @@ class AWSUtils():
         #  Hiujin, Carmen, Sofie, Ivy, Ewa, Maja, Gabrielle, Nicole, Filiz, Camila, Jacek, Thiago, Justin, Celine, Kazuha,
         #  Kendra, Arlet, Ricardo, Mads, Hannah, Mathieu, Lea, Sergio, Hala, Tatyana, Penelope, Naja, Olivia, Ruben, Laura,
         #  Takumi, Mizuki, Carla, Conchita, Jan, Kimberly, Liv, Adriano, Lupe, Joey, Pedro, Seoyeon, Emma, Niamh, Stephen]
+
+
+    # 참고 : https://github.com/awslabs/amazon-transcribe-streaming-sdk
+    def request_transcribe(self):
+        print("ASR")
