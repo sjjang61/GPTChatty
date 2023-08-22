@@ -29,3 +29,15 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     working_dir: /websocket_server
     restart: always
+
+  web_svr:
+    container_name: web_server
+    build: ./docker/python-web
+    ports:
+      - 8889:8889
+    volumes:
+      # host의 경로를 컨테이너 내부와 마운트
+      - .:/websocket_server
+      - /etc/letsencrypt:/etc/letsencrypt
+    working_dir: /websocket_server
+    restart: always

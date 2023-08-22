@@ -15,6 +15,7 @@ urllib3==1.26.6
 # aiofile #async file
 # sounddevice #mic
 
-# fastapi
-# uvicorn
-# python-multipart
+fastapi
+jinja2
+uvicorn
+python-multipart
