@@ -16,5 +16,5 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt \
     && rm /usr/bin/mysql*
 
-CMD ["python3", "WebServer.py" ]
+CMD ["python3", "WebApiServer.py" ]
 
