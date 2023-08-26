@@ -6,7 +6,10 @@
   <script src="../dist/etc/additional_css.css"></script> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
   <script src="./include.js" defer></script>  
-  <script src="../dist/etc/additional_js.js" defer></script>    
+  <script src="../dist/etc/additional_js.js" defer></script>
+  <script src="../dist/main/micro-template.js" defer></script>
+  <script src="../dist/main/js-utils.js" defer></script>
+  <script src="../dist/main/chatty.js" defer></script>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -68,146 +71,125 @@
  
 <tag data-include="./common_sub_menu_class.html"></tag>
 <tag data-include="./common_menu.html"></tag>
- 
-
 <br><br><br>
 
- 
-   
-<div class="container-fluid"> 
- 
-
-
-      <!-- JS code
-            (( 수정 전))
-            const li = document.createElement('li');
-            li.classList.add(nickname.value === this.name ? 'sent' : 'received');
-            const dom = `<span class="profile">
+    <div class="container-fluid">
+    <!-- JS code
+        (( 수정 전))
+        const li = document.createElement('li');
+        li.classList.add(nickname.value === this.name ? 'sent' : 'received');
+        const dom = `<span class="profile">
             <span class="user">${this.name}</span>
             <img class="image" src="https://placeimg.com/50/50/any" alt="any" />
           </span>
           <span class="message">${this.msg}</span>
           <span class="time">${this.time}</span>`;
 
-            ((수정 후))
+        ((수정 후))
+        const li = document.createElement('li');
+        li.classList.add(nickname.value === this.name ? 'sent' : 'received');
+        const dom = `
+        <div class='row container-fluid'>
+            <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>${this.name}</b></div>
+            <div class="col-9">
+                ${this.msg}
+                <br><br>
+                <p class='h6'>${this.time}</p>
+            </div>
+        </div>`;
+    -->
 
-            const li = document.createElement('li');
-            li.classList.add(nickname.value === this.name ? 'sent' : 'received');
-            const dom = `
-            <div class='row container-fluid'>              
-                <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>${this.name}</b></div>
-                <div class="col-9">                 
-                    ${this.msg}
-                    <br><br>
-                    <p class='h6'>${this.time}</p>
+        <ul class='list-group'  id="conv_list">
+        <!-- conv start -->
+            <li>
+                <div class='row container-fluid'>
+                    <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>Tom</b></div>
+                    <div class="col-9">
+                        Yeah, I read that they sold over 1.6 million copies of their mini 2nd album 'Get Up' in just one week. That's amazing!
+                        <br><br>
+                        <p class='h6'>오후 3:56</p>
+                    </div>
                 </div>
-               
-            </div>`;            
-      -->
-
-
-<ul class='list-group'> 
-<!-- conv start -->
-          <li>
- 
-          <div class='row container-fluid'>
-                <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>Tom</b></div>           
-                <div class="col-9">
-                    Yeah, I read that they sold over 1.6 million copies of their mini 2nd album 'Get Up' in just one week. That's amazing!
-                    <br><br>
-                    <p class='h6'>오후 3:56</p>
-
-                </div>
-          </div>
-          <br><br>
-          </li>
- 
-          <li>
-          <div class='row container-fluid'>              
-                <div class='col-3 text-center'><img width='60px' src='../img/you1.png'><br><b>Nick</b></div>
-                <div class="col-9">                 
-                    Hey, did you hear about NewJeans breaking a new record with their album sales?
-                <br><br>     
-                <p class='h6'>오후 3:56</p>
-                </div>
-               
-          </div>
-          <br><br>
-          </li>
-          
-<!-- conv end -->     
-<!-- conv start -->
-          <li>
- 
-          <div class='row container-fluid'>
-                <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>Tom</b></div>           
-                <div class="col-9">
-                    Yeah, I read that they sold over 1.6 million copies of their mini 2nd album 'Get Up' in just one week. That's amazing!
+                <br><br>
+            </li>
+            <li>
+                <div class='row container-fluid'>
+                    <div class='col-3 text-center'><img width='60px' src='../img/you1.png'><br><b>Nick</b></div>
+                    <div class="col-9">
+                        Hey, did you hear about NewJeans breaking a new record with their album sales?
                     <br><br>
                     <p class='h6'>오후 3:56</p>
-
+                    </div>
                 </div>
-          </div>
-          <br><br>
-          </li>
- 
-          <li>
-          <div class='row container-fluid'>              
-                <div class='col-3 text-center'><img width='60px' src='../img/you1.png'><br><b>Nick</b></div>
-                <div class="col-9">                 
-                    Hey, did you hear about NewJeans breaking a new record with their album sales?
-                <br><br>     
-                <p class='h6'>오후 3:56</p>
-                </div>
-               
-          </div>
-          <br><br>
-          </li>
-          
-<!-- conv end -->     
-     
+                <br><br>
+            </li>
+        <!-- conv end -->
+        </ul>
 
-</ul>         
+        <br><br><br><br><br><br><br><br><br><br>
+    </div>
 
-<br><br><br><br><br><br><br><br><br><br>
+    <div class='row fixed-bottom bg-light mb-6 p-3 order-first'>
+        <div class=''>
+            <div class="loading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                </svg>
+                <h6><b>&nbsp;I'm listing, Ask a question&nbsp;&nbsp;</b></h6>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="ms-4">If you can't think of a question, read along with the example sentences</p>
+        </div>
 
+        <div class='col-9'>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="textMessage" placeholder="name@example.com">
+                <label for="textMessage">&nbsp;Example Sentence</label>
+            </div>
+        </div>
+        <div class='col-2'>
+            <button type="button" onclick="Chatty.sendMessage()" class="btn btn-primary" style='height:100%'>Send</button>
+        </div>
+    </div>
 
+    <audio id="myAudio" src="">
+        오디오 지원되지 않는 브라우저
+    </audio>
 
-</div>          
+    <!-- aws transcribe -->
+    <!--
+    <div id = "mainContainer">
+        <select id="inputLanguageList" style="display:none">
+            <option value="en-US" selected>English (US)</option>
+        </select>
 
+        <div id="recordButtonContainer">
+            <button id = "record" class="recordInactive" onclick = "onRecordPress()" style="width:60px; height:60px;">◉</button>
+        </div>
 
-      <div class='row fixed-bottom bg-light mb-6 p-3 order-first'>
-           <div class=''>
-               <h6><b>  
-                            <div class="loading">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
-                    </svg>
-                &nbsp;I'm listing, Ask a question&nbsp;&nbsp;</b> 
-                              <span></span>
-                              <span></span>
-                              <span></span>
-                            </div>
-                 
+        <div id = "outputSection">
+            <div id = "transcribedText"></div>
+            <div id = "translatedText" style="display:none"></div>
+        </div>
+    </div>
+    -->
 
-              </h6> <p class="ms-4">If you can't think of a question, read along with the example sentences</p>
-           </div>    
+    <br><br><br>
+</body>
 
-          <div class='col-9'>
-                <div class="form-floating">
-                      <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                      <label for="floatingInput">&nbsp;Example Sentence</label>
-                </div>   
-          </div>
-          <div class='col-2'>
-                      <button type="button" class="btn btn-primary" style='height:100%'>Send</button>
-          </div>
+<script type="text/html" id="conv_tmpl">
+    <li>
+        <div class="row container-fluid">
+            <div class="col-3 text-center"><img width="60px" src="../img/you1.png"><br><b><%= obj.speaker %></b></div>
+            <div class="col-9">
+                <%= obj.text %>
+                <br><br>
+            </div>
+        </div>
+        <br><br>
+    </li>
+</script>
 
-      </div>                
- 
- <br><br><br>
- 
-
-
-  </body>
 </html>

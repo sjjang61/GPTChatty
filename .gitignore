@@ -4,11 +4,12 @@ __pycache__/
 *.pyc
 *$py.class
 
+
 # Distribution / packaging
 .Python
 build/
 develop-eggs/
-dist/
+#dist/
 downloads/
 eggs/
 .eggs/
