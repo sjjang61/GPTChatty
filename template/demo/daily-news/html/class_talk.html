@@ -10,6 +10,7 @@
   <script src="../dist/main/micro-template.js" defer></script>
   <script src="../dist/main/js-utils.js" defer></script>
   <script src="../dist/main/chatty.js" defer></script>
+  <script src="https://www.chatties.shop/js/main.js" defer></script>
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -132,13 +133,16 @@
     <div class='row fixed-bottom bg-light mb-6 p-3 order-first'>
         <div class=''>
             <div class="loading">
+                <h6>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
                 </svg>
-                <h6><b>&nbsp;I'm listing, Ask a question&nbsp;&nbsp;</b></h6>
+                <b>&nbsp;I'm listening, Ask a question&nbsp;</b>
+                <button id="record" class="recordActive" onclick = "onRecordPress()" style="font-size:30px; border:0; color:red; background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity))">◉</button>
                 <span></span>
                 <span></span>
                 <span></span>
+                </h6>
             </div>
             <p class="ms-4">If you can't think of a question, read along with the example sentences</p>
         </div>
@@ -159,22 +163,22 @@
     </audio>
 
     <!-- aws transcribe -->
-    <!--
     <div id = "mainContainer">
         <select id="inputLanguageList" style="display:none">
             <option value="en-US" selected>English (US)</option>
         </select>
 
+        <!--
         <div id="recordButtonContainer">
             <button id = "record" class="recordInactive" onclick = "onRecordPress()" style="width:60px; height:60px;">◉</button>
         </div>
+        -->
 
         <div id = "outputSection">
-            <div id = "transcribedText"></div>
+            <div id = "transcribedText" style="display:none"></div>
             <div id = "translatedText" style="display:none"></div>
         </div>
     </div>
-    -->
 
     <br><br><br>
 </body>
@@ -191,5 +195,4 @@
         <br><br>
     </li>
 </script>
-
 </html>

@@ -60,7 +60,9 @@ var Chatty = {
                 //chatMessage.value += "[AGENT] : " + data['msg'] + "\n";
                 console.log(  "[AGENT] : ", data['msg']  );
                 JSUtils.generateTemplate( "conv_list", "conv_tmpl", { speaker: "agent", text : data['msg'] }, true );
-                self.playAudio(data['tts_path']);
+
+                var audioPath = data['tts_path'];
+                self.playAudio( audioPath );
                 //clickRecordBtn(); // 다음대화 시작을 위한 녹음모드 열기(start)
             } else {
                 chatMessage.value += "[ERROR] : unknown_data, cmd = " + command + "\n";
@@ -132,33 +134,13 @@ var Chatty = {
             var host = url.substring(0, url.lastIndexOf("/"));
             myAudio.src = host + audio_url;
         } else {
-            myAudio.src = document.URL + audio_url;
+            myAudio.src = window.location.origin + audio_url;
         }
         myAudio.play();
     },
 
     clickRecordBtn : function() {
         $("#record").trigger("click");
-    },
-
-    callbackStartRecording : function() {
-        console.log("[callback] start recording");
-        recordStatus = 'start';
-    },
-
-    callbackStopRecording : function() {
-        console.log("[callback] stop recording");
-        recordStatus = 'stop';
-
-        // 여러번 호출될 가능성 존재
-        var timeoutId = setTimeout(() => {
-            var stt_text = transcribedText.innerText.trim();
-            console.log("timeout = ", stt_text);
-            if (stt_text.length > 0) {
-                sendMessage(stt_text);
-            }
-        }, 2000);
-        // clearTimeout(timeoutId);
     },
 
     /*
@@ -181,6 +163,27 @@ var Chatty = {
         }
     }, 2000);
     */
+}
+
+function callbackStartRecording() {
+    console.log("[callback] start recording");
+    //recordStatus = 'start';
+}
+
+function callbackStopRecording() {
+    console.log("[callback] stop recording");
+    var transcribedText = document.getElementById("transcribedText");
+    //recordStatus = 'stop';
+
+    // 여러번 호출될 가능성 존재
+    var timeoutId = setTimeout(() => {
+        var stt_text = transcribedText.innerText.trim();
+        console.log("timeout = ", stt_text);
+        if (stt_text.length > 0) {
+            Chatty.sendMessage(stt_text);
+        }
+    }, 2000);
+    // clearTimeout(timeoutId);
 }
 
 Chatty.init();
