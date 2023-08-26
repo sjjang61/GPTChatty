@@ -21,7 +21,7 @@ var Chatty = {
         // 웹 서버를 접속한다.
         var self = this;
         var server = this.get_server();
-        var webSocket = new WebSocket(server);
+        this.webSocket = new WebSocket(server);
 
         // 웹 서버와의 통신을 주고 받은 결과를 출력할 오브젝트를 가져옵니다.
         var logViewArea = document.getElementById("logViewArea");
@@ -31,22 +31,22 @@ var Chatty = {
         var recordStatus = 'stop';
 
         // 소켓 접속이 되면 호출되는 함수
-        webSocket.onopen = function (message) {
+        this.webSocket.onopen = function (message) {
 
             console.log("Server connect...");
             //var contents_url = document.getElementById("contents_url").value;
             //autoMessage("TEXTBOOK", {"url": contents_url})
         };
         // 소켓 접속이 끝나면 호출되는 함수
-        webSocket.onclose = function (message) {
+        this.webSocket.onclose = function (message) {
             //logViewArea.value += "Server Disconnect...\n";
         };
         // 소켓 통신 중에 에러가 발생되면 호출되는 함수
-        webSocket.onerror = function (message) {
+        this.webSocket.onerror = function (message) {
             //logViewArea.value += "error...\n";
         };
         // 소켓 서버로 부터 메시지가 오면 호출되는 함수.
-        webSocket.onmessage = function (message) {
+        this.webSocket.onmessage = function (message) {
             // 출력 area에 메시지를 표시한다.
             var recv_data = JSON.parse(message.data);
             console.log(recv_data);
@@ -68,7 +68,7 @@ var Chatty = {
 
         };
 
-        this.webSocket2 = webSocket;
+        //this.webSocket2 = webSocket;
 
         this.initEvent();
     },
@@ -76,6 +76,7 @@ var Chatty = {
 
     initEvent: function() {
         var self = this;
+        var sendButton = document.getElementById("sendBtn");
         var textMessage = document.getElementById("textMessage");
         //window.addEventListener('focus', $.proxy( this.onFocusView, this ), false );
         textMessage.addEventListener("keyup", function (event) {
@@ -83,6 +84,10 @@ var Chatty = {
                 event.preventDefault();
                 self.sendMessage();
             }
+        });
+
+        sendButton.addEventListener("click", function (event) {
+            self.sendMessage();
         });
     },
 
@@ -101,7 +106,7 @@ var Chatty = {
 
 
         //웹소켓으로 textMessage객체의 값을 보낸다.
-        this.webSocket2.send(sendData);
+        this.webSocket.send(sendData);
         //textMessage객체의 값 초기화
         message.value = "";
     },
@@ -111,11 +116,11 @@ var Chatty = {
         var data = {"cmd": command, "params": params};
         var sendData = JSON.stringify(data);
         //웹소켓으로 textMessage객체의 값을 보낸다.
-        this.webSocket2.send(sendData);
+        this.webSocket.send(sendData);
     },
 
     disconnect : function() {
-        this.webSocket2.close();
+        this.webSocket.close();
     },
 
     playAudio : function(audio_url) {
