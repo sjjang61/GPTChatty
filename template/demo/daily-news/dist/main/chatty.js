@@ -60,6 +60,7 @@ var Chatty = {
                 //chatMessage.value += "[AGENT] : " + data['msg'] + "\n";
                 console.log(  "[AGENT] : ", data['msg']  );
                 JSUtils.generateTemplate( "conv_list", "conv_tmpl", { speaker: "agent", text : data['msg'] }, true );
+                scroll_to_bottom();
 
                 var audioPath = data['tts_path'];
                 self.playAudio( audioPath );
@@ -178,12 +179,19 @@ function callbackStopRecording() {
     // 여러번 호출될 가능성 존재
     var timeoutId = setTimeout(() => {
         var stt_text = transcribedText.innerText.trim();
-        console.log("timeout = ", stt_text);
+        console.log("[ASR] timeout = ", stt_text);
         if (stt_text.length > 0) {
             Chatty.sendMessage(stt_text);
+            scroll_to_bottom();
         }
     }, 2000);
     // clearTimeout(timeoutId);
 }
+
+function scroll_to_bottom() {
+  var chatUl = document.getElementById('chatview');
+  chatUl.scrollTop = chatUl.scrollHeight; // 스크롤의 위치를 최하단으로
+}
+
 
 Chatty.init();

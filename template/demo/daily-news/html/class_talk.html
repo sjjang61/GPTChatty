@@ -19,14 +19,56 @@
   <meta name="keywords" content="HTML, CSS, JS, JavaScript, framework, bootstrap, front-end, frontend, web development">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">  
 
- <style type="text/css">
-     body {
+  <style type="text/css">
+    body {
     margin: 0; 
     display: flex;            /*내부 요소들이 차례로 배치 */
     justify-content: center;  /*내부 요소의 좌우 정렬 상태를 가운데로 설정*/
     align-items: center;      /*요소는 세로 중앙 배치*/
     height: 100vh;            /*웹 크기 변화에 따라 변경되는 반응형 수치*/
   }
+
+
+#recordButtonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 20px;
+    width: 100%;
+}
+
+.recordActive {
+    font-size: 30px;
+    background-color: red;
+    padding-bottom: 10px;
+    cursor: pointer;
+    width: 400px;
+    height: 40px;
+    border: 1px solid darkgray;
+    border-radius: 15px;
+    color: white;
+}
+
+.recordInactive {
+    font-size: 30px;
+    background-color: white;
+    padding-bottom: 10px;
+    cursor: pointer;
+    width: 400px;
+    height: 40px;
+    border: 1px solid darkgray;
+    border-radius: 15px;
+    color: red;
+}
+
+.recordInactive:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.recordInactive:active {
+    background-color: white;
+}
 
 .loading span {
     display: inline-block; /* span 내부요소들을 한줄로 세우기 */
@@ -74,7 +116,7 @@
 <tag data-include="./common_menu.html"></tag>
 <br><br><br>
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="chatview" style="height: 500px; position: relative; top: -140px; padding-top: 20px; overflow: auto;">
     <!-- JS code
         (( 수정 전))
         const li = document.createElement('li');
@@ -101,18 +143,20 @@
     -->
 
         <ul class='list-group'  id="conv_list">
-        <!-- conv start -->
+            <!-- conv start -->
             <li>
                 <div class='row container-fluid'>
-                    <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>Tom</b></div>
+                    <div class='col-3 text-center'><img width='60px' src='../img/me.png'><br><b>agent</b></div>
                     <div class="col-9">
-                        Yeah, I read that they sold over 1.6 million copies of their mini 2nd album 'Get Up' in just one week. That's amazing!
+                        Let's start to conversation.
+                        Teacher will be answer.
                         <br><br>
-                        <p class='h6'>오후 3:56</p>
+                        <!--<p class='h6'>오후 3:56</p>-->
                     </div>
                 </div>
-                <br><br>
+                <br>
             </li>
+            <!--
             <li>
                 <div class='row container-fluid'>
                     <div class='col-3 text-center'><img width='60px' src='../img/you1.png'><br><b>Nick</b></div>
@@ -124,21 +168,23 @@
                 </div>
                 <br><br>
             </li>
-        <!-- conv end -->
+            -->
+            <!-- conv end -->
         </ul>
-
-        <br><br><br><br><br><br><br><br><br><br>
+        <br>
     </div>
 
     <div class='row fixed-bottom bg-light mb-6 p-3 order-first'>
         <div class=''>
+            <div id="recordButtonContainer">
+                <button id = "record" class="recordInactive" onclick = "onRecordPress()" style="font-size:25px; width: 100%">◉</button>
+            </div>
             <div class="loading">
                 <h6>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
                 </svg>
                 <b>&nbsp;I'm listening, Ask a question&nbsp;</b>
-                <button id="record" class="recordActive" onclick = "onRecordPress()" style="font-size:30px; border:0; color:red; background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity))">◉</button>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -192,7 +238,7 @@
                 <br><br>
             </div>
         </div>
-        <br><br>
+        <br>
     </li>
 </script>
 </html>
