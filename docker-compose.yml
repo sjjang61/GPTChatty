@@ -30,14 +30,14 @@ services:
     working_dir: /websocket_server
     restart: always
 
-  api_svr:
-    container_name: api_server
-    build: docker/python-api
-    ports:
-      - 8889:8889
-    volumes:
-      # host의 경로를 컨테이너 내부와 마운트
-      - .:/websocket_server
-      #- /etc/letsencrypt:/etc/letsencrypt
-    working_dir: /websocket_server
-    restart: always
+#  api_svr:
+#    container_name: api_server
+#    build: docker/python-api
+#    ports:
+#      - 8889:8889
+#    volumes:
+#      # host의 경로를 컨테이너 내부와 마운트
+#      - .:/websocket_server
+#      #- /etc/letsencrypt:/etc/letsencrypt
+#    working_dir: /websocket_server
+#    restart: always
