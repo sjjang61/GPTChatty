@@ -21,11 +21,32 @@ sudo python SimpleHTTPSServer.py
 5. Change ws://localhost:8000/ to wss://localhost:8000 and click connect.
 ```
 
+## Local Development Environment
+- Step-1. Project Env 
 ```python
+# PROJECT_HOME/.env
 OPENAI_API_KEY="..."
 AWS_ACCESS_KEY_ID="..."
 AWS_SECRET_ACCESS_ID="..."
 AWS_SESSION_TOKEN=""
+```
+
+- Step-2. AWS Console Config
+```python
+# ~/.aws/config
+[default]
+region = "ap-northeast-2"
+
+# ~/.aws/credentials 
+[default]
+aws_access_key_id = "..."
+aws_secret_access_key = "..."    
+```
+
+- Step-3. RUN
+```python
+python WebSocketChatServer.py --ssl False
+Browser : template/index.html
 ```
 
 ## Protocol
