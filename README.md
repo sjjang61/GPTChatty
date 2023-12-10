@@ -49,6 +49,15 @@ python WebSocketChatServer.py --ssl False
 Browser : template/index.html
 ```
 
+## Transcribe Javascript Packing
+- https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javascriptv3/example_code/cross-services/transcribe-streaming-app
+- defined template/demo/transcribe-streaming-app/index.js
+```python
+cd template/demo/transcribe-streaming-app
+npm run build
+mv template/demo/transcribe-streaming-app/src/main.js template/js/
+```
+
 ## Protocol
 - defined in protocol.py
 ```python
